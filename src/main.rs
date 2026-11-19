@@ -59,7 +59,7 @@ fn grep(pattern: &str, path: &std::path::Path, line_numbers: bool, case_insensit
 }
 
 fn Counter(path: &std::path::Path, count_characters: bool, count_bytes: bool) -> Result<()> {
-    let content: String = std::fs::read_to_string(path).expect("Couldn't read file");
+    let content: String = std::fs::read_to_string(path).with_context(|| format!("Couldn't read file `{}`", path.display()))?;
     let mut last_char: char = ' ';
     let mut word_count: i32 = 0;
     let mut character_count: i32 = 0;
