@@ -1,0 +1,5 @@
+Hi! This is a test file
+you can use it if you want to test this CLI out
+here you'll be able to test all functionalities
+such as the grep clone and the word counter
+feel free to test it with any file you want.
