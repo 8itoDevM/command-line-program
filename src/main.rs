@@ -21,6 +21,9 @@ enum Commands {
     },
     Counter{
         path: std::path::PathBuf,
+
+        #[arg(short = 'c', long)]
+        count_characters: bool,
     }
 }
 
@@ -52,20 +55,25 @@ fn grep(pattern: &str, path: &std::path::Path, line_numbers: bool, case_insensit
     Ok(())
 }
 
-fn Counter(path: &std::path::Path) -> Result<()> {
+fn Counter(path: &std::path::Path, count_characters: bool) -> Result<()> {
     let content: String = std::fs::read_to_string(path).expect("Couldn't read file");
     let mut last_char: char = ' ';
     let mut word_count: i32 = 0;
+    let mut character_count: i32 = 0;
 
     for character in content.chars() {
+        character_count += 1;
         if !character.is_whitespace() && last_char.is_whitespace(){
             word_count += 1;
         }
         last_char = character;
     }
 
+    if count_characters{
+        println!("There are {} words and {} characters (with white spaces)", word_count, character_count);
+    }
+    
     println!("There are {} words", word_count);
-
     Ok(())
 }
 
@@ -74,7 +82,7 @@ fn main() -> Result<()> {
 
     match args.command {
         Commands::Grep { pattern, path, line_numbers, case_insensitive} => grep(&pattern, &path, line_numbers, case_insensitive)?,
-        Commands::Counter { path } => Counter(&path)?,
+        Commands::Counter { path, count_characters } => Counter(&path, count_characters)?,
     }
 
     Ok(())
